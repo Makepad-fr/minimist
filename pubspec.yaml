@@ -1,6 +1,6 @@
 name: minimist
-description: A Dart library for parsing command ling options and arguments inspired from minimist npm package.
-version: 0.1.0
+description: A Dart library for parsing command ling options and arguments inspired from minimist npm package.wh
+version: 0.1.1
 homepage: https://github.com/Clique-Paris/minimist
 
 environment:
