@@ -47,15 +47,5 @@ workflows:
   lint-and-test:
     # Run the welcome/run job in its own container
     jobs:
-      - test:
-          filters:
-              branches:
-                only:
-                  - master
-                  - development
-      - lint:
-          filters:
-              branches:
-                only:
-                  - master
-                  - development
+      - test
+      - lint
