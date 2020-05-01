@@ -102,7 +102,7 @@ class Minimist {
   /// @param param1 Parameter description
   /// @param param2 Parameter description
   /// @returns Returns a Map object that contains parsed arguments and options.
-  /// @throws FormatException if stopEarly option is true
+  /// @throws FormatException if there's a missing value for a String typed option
   Map<String, dynamic> _parseWithOptions() {
     var result = <String, dynamic>{};
     result['_'] = [];
