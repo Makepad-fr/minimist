@@ -2,7 +2,7 @@ import 'package:minimist/minimist.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('A group of tests without the parse schema', () {
+  group('A group of tests without the parse options', () {
     Minimist minimist;
 
     var arguments1 = ['-a', 'beep', '-b' ,'boop'],
