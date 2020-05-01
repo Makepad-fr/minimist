@@ -1,5 +1,7 @@
 # minimist
 
+[![Clique-Paris](https://circleci.com/gh/Clique-Paris/minimist.svg?style=svg)](https://app.circleci.com/pipelines/github/Clique-Paris/minimist)
+
 A Dart module for parsing command line parameters and options, inspired from the [minimist](https://www.npmjs.com/package/minimist) npm module.
 
 ## Usage
