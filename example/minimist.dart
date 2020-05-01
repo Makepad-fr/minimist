@@ -1,5 +1,5 @@
 
-import '../lib/minimist.dart';
+import 'package:minimist/minimist.dart';
 
 void main(List<String> arguments) {
   var minimist = Minimist(arguments);
