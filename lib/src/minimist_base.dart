@@ -97,21 +97,20 @@ class Minimist {
     return parsedArguments;
   }
 
-  
   /// Function handles the parsing operation with given options
   ///
   /// @param param1 Parameter description
   /// @param param2 Parameter description
   /// @returns Returns a Map object that contains parsed arguments and options.
   /// @throws FormatException if stopEarly option is true
-  Map<String, dynamic> _parseWithOptions (){
+  Map<String, dynamic> _parseWithOptions() {
     var result = <String, dynamic>{};
     result['_'] = [];
     var _index = arguments.toList().indexOf('--');
     var localArguments = arguments;
     if (_index != -1) {
-        localArguments = arguments.sublist(0, _index);
-        result['_'] = arguments.sublist(_index + 1);
+      localArguments = arguments.sublist(0, _index);
+      result['_'] = arguments.sublist(_index + 1);
     }
 
     var stringRegExpOptions = options.string.map((strOpt) {
@@ -119,7 +118,7 @@ class Minimist {
       if (alias != null) {
         strOpt += '|$alias';
       }
-      return RegExp(r'^(\-){1,2}('+ strOpt + ')((=(.+))|(\d+))?\$');
+      return RegExp(r'^(\-){1,2}(' + strOpt + ')((=(.+))|(\d+))?\$');
     }).toList();
 
     var booleanRegExpOptions = options.boolean.map((boolOpt) {
@@ -127,10 +126,11 @@ class Minimist {
       if (alias != null) {
         boolOpt += '|$alias';
       }
-      return RegExp(r'^(((\-){1,2}('+ boolOpt +'))|(\-\-(no)\-(' + boolOpt + ')))\$');
+      return RegExp(
+          r'^(((\-){1,2}(' + boolOpt + '))|(\-\-(no)\-(' + boolOpt + ')))\$');
     }).toList();
 
-    for (var i=0; i<stringRegExpOptions.length; i++) {
+    for (var i = 0; i < stringRegExpOptions.length; i++) {
       var regexp = stringRegExpOptions[i];
       var _alias = findInputInMap(options.alias, options.string[i]);
       var idx = searchWithRegexp(regexp, localArguments);
@@ -148,13 +148,11 @@ class Minimist {
               result[_alias] = matched.group(3);
             }
           } else {
-            if (
-              ((localArguments.length - 1) > idx) && 
-              (RegExp(r'^[a-zA-Z0-9]+$').hasMatch(localArguments[idx + 1]))
-            ) {
-              result[options.string[i]] = localArguments[idx +1];
+            if (((localArguments.length - 1) > idx) &&
+                (RegExp(r'^[a-zA-Z0-9]+$').hasMatch(localArguments[idx + 1]))) {
+              result[options.string[i]] = localArguments[idx + 1];
               if (_alias != null) {
-                result[_alias] = localArguments[idx +1];
+                result[_alias] = localArguments[idx + 1];
               }
             } else {
               throw FormatException('${options.string[i]} needs a value');
@@ -164,7 +162,7 @@ class Minimist {
       }
     }
 
-    for (var i=0; i<booleanRegExpOptions.length; i++) {
+    for (var i = 0; i < booleanRegExpOptions.length; i++) {
       var regexp = booleanRegExpOptions[i];
       var _alias = findInputInMap(options.alias, options.boolean[i]);
       var idx = searchWithRegexp(regexp, localArguments);
@@ -189,10 +187,8 @@ class Minimist {
     for (var key in options.alias.keys) {
       var value = options.alias[key];
       var allKnownElements = [...options.string, ...options.boolean];
-      if (
-        (allKnownElements.contains(value) == false) &&
-        (allKnownElements.contains(key) == false)
-      ) {
+      if ((allKnownElements.contains(value) == false) &&
+          (allKnownElements.contains(key) == false)) {
         unknowns[key] = value;
       }
     }
@@ -217,7 +213,7 @@ class Minimist {
           result[_alias] = options.byDefault[key];
         }
       }
-    }  
+    }
 
     var allFound = [...result.keys, ...result.values];
     for (var localArg in localArguments) {
@@ -226,7 +222,7 @@ class Minimist {
           result['_'].add(localArg);
         }
       }
-    }  
+    }
     // options.
     return result;
   }

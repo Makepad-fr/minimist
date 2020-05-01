@@ -1,8 +1,7 @@
 import 'package:minimist/minimist.dart';
 
-void main (List<String> arguments) {
-    var minimist = Minimist(
-      arguments,
+void main(List<String> arguments) {
+  var minimist = Minimist(arguments,
       options: MinimistOptions(
         string: ['lang', 'username', 'password'],
         boolean: ['pager'],
@@ -13,11 +12,8 @@ void main (List<String> arguments) {
           'password': 'p',
           'g': 'pager'
         },
-        byDefault: {
-          'lang': 'en'
-        },
-      )
-    );
-    print('Parsed arguments are');
-    print(minimist.args);
+        byDefault: {'lang': 'en'},
+      ));
+  print('Parsed arguments are');
+  print(minimist.args);
 }
