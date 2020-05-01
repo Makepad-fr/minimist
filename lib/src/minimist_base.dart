@@ -168,7 +168,6 @@ class Minimist {
       var idx = searchWithRegexp(regexp, localArguments);
       if (idx != -1) {
         var matched = regexp.firstMatch(localArguments[idx]);
-        print(matched.groupCount);
         if (matched.group(matched.groupCount - 1) != null) {
           result[options.boolean[i]] = false;
           if (_alias != null) {

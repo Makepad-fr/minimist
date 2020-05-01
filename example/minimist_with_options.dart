@@ -14,6 +14,5 @@ void main(List<String> arguments) {
         },
         byDefault: {'lang': 'en'},
       ));
-  print('Parsed arguments are');
   print(minimist.args);
 }
