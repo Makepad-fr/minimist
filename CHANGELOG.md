@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.0] - 2020-05-01
+
+### Added
+
+- Parsing using `MinimistOptions` implemented
+
 ## [0.1.1] - 2020-05-01
 
 ### Changed
