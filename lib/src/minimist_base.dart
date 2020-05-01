@@ -1,3 +1,5 @@
+import 'package:minimist/src/utils/parser_helpers.dart';
+
 import 'models/minimist_options.dart';
 
 /// Checks if you are awesome. Spoiler: you are.
@@ -12,7 +14,7 @@ class Minimist {
   /// Function parse arguments without any schema only using generic regular expressions
   ///
   /// @returns A Map<String, dynamic> contains parsed arguments.
-  Map<String, dynamic> anonymousParse() {
+  Map<String, dynamic> _anonymousParse() {
     var parsedArguments = <String, dynamic>{};
     parsedArguments['_'] = [];
     final argumentPattern = RegExp(r'^(\-{1,2})([a-zA-Z]+)((=(.+))|(\d+))?$');
@@ -234,7 +236,7 @@ class Minimist {
   Map<String, dynamic> get args {
     if (options == null) {
       // If there's no schema found
-      return anonymousParse();
+      return _anonymousParse();
     } else {
       // If the parse schema is defined
       return _parseWithOptions();
