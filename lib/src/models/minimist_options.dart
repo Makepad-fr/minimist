@@ -1,9 +1,13 @@
 class MinimistOptions {
-  final List<String> string;
-  final List<String> boolean;
-  final Map<String, String> alias;
-  final Map<String, String> byDefault;
+  List<String> string;
+  List<String> boolean;
+  Map<String, String> alias;
+  Map<String, String> byDefault;
 
-  const MinimistOptions(
-      {this.string, this.boolean, this.alias, this.byDefault});
+  MinimistOptions({this.string, this.boolean, this.alias, this.byDefault}) {
+    string ??= [];
+    boolean ??= [];
+    alias ??= <String, String>{};
+    byDefault ??= <String, String>{};
+  }
 }
