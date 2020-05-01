@@ -180,6 +180,11 @@ class Minimist {
             result[_alias] = true;
           }
         }
+      } else {
+        result[options.boolean[i]] = false;
+        if (_alias != null) {
+          result[_alias] = false;
+        }
       }
     }
 
