@@ -5,7 +5,7 @@ import 'models/minimist_options.dart';
 /// Checks if you are awesome. Spoiler: you are.
 class Minimist {
   final List<String> arguments;
-  final MinimistOptions options;
+  final MinimistOptions? options;
 
   Minimist(this.arguments, {this.options}) {
     ArgumentError.checkNotNull(arguments, 'arguments');
@@ -14,8 +14,8 @@ class Minimist {
   /// Function parse arguments without any schema only using generic regular expressions
   ///
   /// @returns A Map<String, dynamic> contains parsed arguments.
-  Map<String, dynamic> _anonymousParse() {
-    var parsedArguments = <String, dynamic>{};
+  Map<String?, dynamic> _anonymousParse() {
+    var parsedArguments = <String?, dynamic>{};
     parsedArguments['_'] = [];
     final argumentPattern = RegExp(r'^(\-{1,2})([a-zA-Z]+)((=(.+))|(\d+))?$');
     // final RegExp longArgumentPattern = RegExp(r"^\-\-([a-zA-Z]+)((=(.+))|(\d+))?$");
@@ -58,7 +58,7 @@ class Minimist {
         } else {
           // Short version of arguments begins with -
           var parsedParameters =
-              RegExp(r'([a-zA-Z])').allMatches(matched.group(2)).map((match) {
+              RegExp(r'([a-zA-Z])').allMatches(matched.group(2)!).map((match) {
             return match.group(1);
           }).toList();
           var allExceptLastParams =
@@ -103,8 +103,8 @@ class Minimist {
   /// @param param2 Parameter description
   /// @returns Returns a Map object that contains parsed arguments and options.
   /// @throws FormatException if there's a missing value for a String typed option
-  Map<String, dynamic> _parseWithOptions() {
-    var result = <String, dynamic>{};
+  Map<String?, dynamic> _parseWithOptions() {
+    var result = <String?, dynamic>{};
     result['_'] = [];
     var _index = arguments.toList().indexOf('--');
     var localArguments = arguments;
@@ -113,16 +113,16 @@ class Minimist {
       result['_'] = arguments.sublist(_index + 1);
     }
 
-    var stringRegExpOptions = options.string.map((strOpt) {
-      var alias = findInputInMap(options.alias, strOpt);
+    var stringRegExpOptions = options!.string!.map((strOpt) {
+      var alias = findInputInMap(options!.alias!, strOpt);
       if (alias != null) {
         strOpt += '|$alias';
       }
       return RegExp(r'^(\-){1,2}(' + strOpt + ')((=(.+))|(\d+))?\$');
     }).toList();
 
-    var booleanRegExpOptions = options.boolean.map((boolOpt) {
-      var alias = findInputInMap(options.alias, boolOpt);
+    var booleanRegExpOptions = options!.boolean!.map((boolOpt) {
+      var alias = findInputInMap(options!.alias!, boolOpt);
       if (alias != null) {
         boolOpt += '|$alias';
       }
@@ -132,30 +132,30 @@ class Minimist {
 
     for (var i = 0; i < stringRegExpOptions.length; i++) {
       var regexp = stringRegExpOptions[i];
-      var _alias = findInputInMap(options.alias, options.string[i]);
+      var _alias = findInputInMap(options!.alias!, options!.string![i]);
       var idx = searchWithRegexp(regexp, localArguments);
       if (idx != -1) {
-        var matched = regexp.firstMatch(localArguments[idx]);
+        var matched = regexp.firstMatch(localArguments[idx])!;
         if (matched.group(5) != null) {
-          result[options.string[i]] = matched.group(5);
+          result[options!.string![i]] = matched.group(5);
           if (_alias != null) {
             result[_alias] = matched.group(5);
           }
         } else {
           if (matched.group(3) != null) {
-            result[options.string[i]] = matched.group(3);
+            result[options!.string![i]] = matched.group(3);
             if (_alias != null) {
               result[_alias] = matched.group(3);
             }
           } else {
             if (((localArguments.length - 1) > idx) &&
                 (RegExp(r'^[a-zA-Z0-9]+$').hasMatch(localArguments[idx + 1]))) {
-              result[options.string[i]] = localArguments[idx + 1];
+              result[options!.string![i]] = localArguments[idx + 1];
               if (_alias != null) {
                 result[_alias] = localArguments[idx + 1];
               }
             } else {
-              throw FormatException('${options.string[i]} needs a value');
+              throw FormatException('${options!.string![i]} needs a value');
             }
           }
         }
@@ -164,33 +164,33 @@ class Minimist {
 
     for (var i = 0; i < booleanRegExpOptions.length; i++) {
       var regexp = booleanRegExpOptions[i];
-      var _alias = findInputInMap(options.alias, options.boolean[i]);
+      var _alias = findInputInMap(options!.alias!, options!.boolean![i]);
       var idx = searchWithRegexp(regexp, localArguments);
       if (idx != -1) {
-        var matched = regexp.firstMatch(localArguments[idx]);
+        var matched = regexp.firstMatch(localArguments[idx])!;
         if (matched.group(matched.groupCount - 1) != null) {
-          result[options.boolean[i]] = false;
+          result[options!.boolean![i]] = false;
           if (_alias != null) {
             result[_alias] = false;
           }
         } else {
-          result[options.boolean[i]] = true;
+          result[options!.boolean![i]] = true;
           if (_alias != null) {
             result[_alias] = true;
           }
         }
       } else {
-        result[options.boolean[i]] = false;
+        result[options!.boolean![i]] = false;
         if (_alias != null) {
           result[_alias] = false;
         }
       }
     }
 
-    var unknowns = <String, String>{};
-    for (var key in options.alias.keys) {
-      var value = options.alias[key];
-      var allKnownElements = [...options.string, ...options.boolean];
+    var unknowns = <String, String?>{};
+    for (var key in options!.alias!.keys) {
+      var value = options!.alias![key];
+      var allKnownElements = [...options!.string!, ...options!.boolean!];
       if ((allKnownElements.contains(value) == false) &&
           (allKnownElements.contains(key) == false)) {
         unknowns[key] = value;
@@ -198,7 +198,7 @@ class Minimist {
     }
 
     for (var unknownKey in unknowns.keys) {
-      var strPattern = unknownKey + '|' + unknowns[unknownKey];
+      var strPattern = unknownKey + '|' + unknowns[unknownKey]!;
       var unknownRegExp = RegExp(r'^(\-{1,2})(' + strPattern + ')\$');
       var idx = searchWithRegexp(unknownRegExp, localArguments);
       result[unknownKey] = false;
@@ -209,12 +209,12 @@ class Minimist {
       }
     }
 
-    for (var key in options.byDefault.keys) {
+    for (var key in options!.byDefault!.keys) {
       if (result[key] == null) {
-        result[key] = options.byDefault[key];
-        var _alias = findInputInMap(options.alias, key);
+        result[key] = options!.byDefault![key];
+        var _alias = findInputInMap(options!.alias!, key);
         if (_alias != null) {
-          result[_alias] = options.byDefault[key];
+          result[_alias] = options!.byDefault![key];
         }
       }
     }
@@ -233,7 +233,7 @@ class Minimist {
 
   /// Function parse arguments following the schema
   /// @returns A Map<String, dynamic> object with the parsed arguments
-  Map<String, dynamic> get args {
+  Map<String?, dynamic> get args {
     if (options == null) {
       // If there's no schema found
       return _anonymousParse();

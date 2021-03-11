@@ -3,7 +3,7 @@
 /// @param map The value map that we want to search
 /// @param input The input value that we are searching in the map
 /// @returns The found value in key/value pairs of the input.
-String findInputInMap(Map<String, String> map, String input) {
+String? findInputInMap(Map<String, String> map, String input) {
   if (map[input] != null) {
     return map[input];
   }
